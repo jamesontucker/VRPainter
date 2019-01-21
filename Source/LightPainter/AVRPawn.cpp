@@ -23,6 +23,12 @@ void AAVRPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UPainterSaveGame* Painting = UPainterSaveGame::Create();
+	if (Painting && Painting->Save())
+	{
+		CurrentSlotName = Painting->GetSlotName();
+	}
+
 	if (PaintBrushHandControllerClass)
 	{
 		RightPaintBrushHandController = GetWorld()->SpawnActor<AHandControllerBase>(PaintBrushHandControllerClass);
@@ -50,15 +56,18 @@ void AAVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AAVRPawn::Save()
 {
-	UPainterSaveGame* Painting = UPainterSaveGame::Create();
-	Painting->SetState("Hello World!");
-	Painting->SerializeFromWorld(GetWorld());
-	Painting->Save();
+	UPainterSaveGame* Painting = UPainterSaveGame::Load(CurrentSlotName);
+	if (Painting)
+	{
+		Painting->SetState("Hello World!");
+		Painting->SerializeFromWorld(GetWorld());
+		Painting->Save();
+	}
 }
 
 void AAVRPawn::Load()
 {
-	UPainterSaveGame* Painting = UPainterSaveGame::Load();
+	UPainterSaveGame* Painting = UPainterSaveGame::Load(CurrentSlotName);
 	if (Painting)
 	{
 		Painting->DeserializeToWorld(GetWorld());
