@@ -2,6 +2,8 @@
 
 #include "PaintingGameMode.h"
 #include "Kismet/GameplayStatics.h"
+#include "Saving/PainterSaveGame.h"
+#include "Kismet/StereoLayerFunctionLibrary.h"
 
 
 void APaintingGameMode::InitGame(const FString & MapName, const FString & Options, FString & ErrorMessage)
@@ -13,3 +15,19 @@ void APaintingGameMode::InitGame(const FString & MapName, const FString & Option
 	UE_LOG(LogTemp, Warning, TEXT("SlotName: %s"), *SlotName);
 }
 
+void APaintingGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UPainterSaveGame* Painting = UPainterSaveGame::Load(SlotName);
+	if (Painting)
+	{
+		Painting->DeserializeToWorld(GetWorld());
+
+		UStereoLayerFunctionLibrary::HideSplashScreen();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Game slot not found: %s"), *SlotName);
+	}
+}

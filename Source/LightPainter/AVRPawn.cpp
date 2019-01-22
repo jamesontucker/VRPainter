@@ -51,7 +51,6 @@ void AAVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction(TEXT("RightTrigger"), EInputEvent::IE_Pressed, this, &AAVRPawn::RightTriggerPressed);
 	PlayerInputComponent->BindAction(TEXT("RightTrigger"), EInputEvent::IE_Released, this, &AAVRPawn::RightTriggerReleased);
 	PlayerInputComponent->BindAction(TEXT("Save"), EInputEvent::IE_Released, this, &AAVRPawn::Save);
-	PlayerInputComponent->BindAction(TEXT("Load"), EInputEvent::IE_Released, this, &AAVRPawn::Load);
 }
 
 void AAVRPawn::Save()
@@ -62,19 +61,5 @@ void AAVRPawn::Save()
 		Painting->SetState("Hello World!");
 		Painting->SerializeFromWorld(GetWorld());
 		Painting->Save();
-	}
-}
-
-void AAVRPawn::Load()
-{
-	UPainterSaveGame* Painting = UPainterSaveGame::Load(CurrentSlotName);
-	if (Painting)
-	{
-		Painting->DeserializeToWorld(GetWorld());
-		UE_LOG(LogTemp, Warning, TEXT("Painting State %s"), *Painting->GetState());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Not found"));
 	}
 }
