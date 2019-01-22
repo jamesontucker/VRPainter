@@ -1,10 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PaintingGameMode.h"
-#include "Kismet/GameplayStatics.h"
 #include "Saving/PainterSaveGame.h"
 #include "Kismet/StereoLayerFunctionLibrary.h"
-
+#include "Kismet/GameplayStatics.h"
 
 void APaintingGameMode::InitGame(const FString & MapName, const FString & Options, FString & ErrorMessage)
 {
@@ -19,12 +18,27 @@ void APaintingGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Load();
+
+	UStereoLayerFunctionLibrary::HideSplashScreen();
+}
+
+void APaintingGameMode::Save()
+{
+	UPainterSaveGame* Painting = UPainterSaveGame::Load(SlotName);
+	if (Painting)
+	{
+		Painting->SerializeFromWorld(GetWorld());
+		Painting->Save();
+	}
+}
+
+void APaintingGameMode::Load()
+{
 	UPainterSaveGame* Painting = UPainterSaveGame::Load(SlotName);
 	if (Painting)
 	{
 		Painting->DeserializeToWorld(GetWorld());
-
-		UStereoLayerFunctionLibrary::HideSplashScreen();
 	}
 	else
 	{

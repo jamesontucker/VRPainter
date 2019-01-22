@@ -2,7 +2,9 @@
 
 #include "AVRPawn.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
 #include "Saving/PainterSaveGame.h"
+#include "PaintingGameMode.h"
 
 // Sets default values
 AAVRPawn::AAVRPawn()
@@ -55,11 +57,9 @@ void AAVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AAVRPawn::Save()
 {
-	UPainterSaveGame* Painting = UPainterSaveGame::Load(CurrentSlotName);
-	if (Painting)
-	{
-		Painting->SetState("Hello World!");
-		Painting->SerializeFromWorld(GetWorld());
-		Painting->Save();
-	}
+	auto GameMode = Cast<APaintingGameMode>(GetWorld()->GetAuthGameMode());
+	if (!GameMode) return;
+	GameMode->Save();
+
+	UGameplayStatics::OpenLevel(GetWorld(), TEXT("MainMenu"));
 }
