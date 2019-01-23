@@ -26,6 +26,8 @@ public:
 
 	void ClearPaintings();
 
+	int32 GetNumberOfSlots() const;
+
 protected:
 	UPROPERTY(BlueprintReadonly, VisibleAnywhere, meta = (BindWidget))
 	UUniformGridPanel* PaintingGrid;
