@@ -25,10 +25,18 @@ void AAVRPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (PaintBrushHandControllerClass)
+	if (RightHandControllerClass)
 	{
-		RightPaintBrushHandController = GetWorld()->SpawnActor<AHandControllerBase>(PaintBrushHandControllerClass);
-		RightPaintBrushHandController->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+		RightHandController = GetWorld()->SpawnActor<AHandControllerBase>(RightHandControllerClass);
+		RightHandController->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+		RightHandController->SetHand(EControllerHand::Right);
+	}
+
+	if (LeftHandControllerClass)
+	{
+		LeftHandController = GetWorld()->SpawnActor<AHandControllerBase>(LeftHandControllerClass);
+		LeftHandController->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale);
+		LeftHandController->SetHand(EControllerHand::Left);
 	}
 }
 
