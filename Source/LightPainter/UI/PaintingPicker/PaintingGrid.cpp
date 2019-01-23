@@ -2,6 +2,7 @@
 
 #include "PaintingGrid.h"
 #include "Components/SizeBox.h"
+#include "Components/HorizontalBoxSlot.h"
 
 
 
@@ -37,5 +38,6 @@ void UPaintingGrid::AddPaginationDot(bool Active)
 	auto Dot = CreateWidget<UPaginationDot>(GetWorld(), PaginationDotClass);
 	if (!Dot) return;
 
-	PaginationDots->AddChild(Dot);
+	UHorizontalBoxSlot* Slot = PaginationDots->AddChildToHorizontalBox(Dot);
+	Slot->SetPadding(FMargin(PaginationDotPadding, 0));
 }
