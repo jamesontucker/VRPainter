@@ -38,8 +38,11 @@ public:
 
 	void SerializeFromWorld(UWorld * World);
 	void DeserializeToWorld(UWorld * World);
+	void TakeScreenshot(UWorld * World);
 
 	FString GetSlotName() const { return SlotName; }
+
+	static FString GetImagePath(const FString & SlotName);
 
 private:
 

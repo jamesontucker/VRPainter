@@ -7,6 +7,9 @@
 #include "Misc/Guid.h"
 #include "PainterSaveGameIndex.h"
 #include "Stroke.h"
+#include "HAL/FileManager.h"
+#include "Paths.h"
+#include "saving/SnapshotCamera.h"
 
 UPainterSaveGame * UPainterSaveGame::Create()
 {
@@ -35,9 +38,9 @@ void UPainterSaveGame::SerializeFromWorld(UWorld * World)
 	Strokes.Empty();
 	for (TActorIterator<AStroke> StrokeItr(World); StrokeItr; ++StrokeItr)
 	{
-		//TODO:Serialize
 		Strokes.Add(StrokeItr->SerializeToStruct());
 	}
+	TakeScreenshot(World);
 }
 
 void UPainterSaveGame::DeserializeToWorld(UWorld * World)
@@ -55,4 +58,25 @@ void UPainterSaveGame::ClearWorld(UWorld * World)
 	{
 		StrokeItr->Destroy();
 	}
+}
+
+void UPainterSaveGame::TakeScreenshot(UWorld * World)
+{
+	for (TActorIterator<ASnapshotCamera> SnapshotCamera(World); SnapshotCamera; ++SnapshotCamera)
+	{
+		FString ThumbnailDir = FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("Thumbs"));
+		IFileManager::Get().MakeDirectory(*ThumbnailDir, true);
+		FString FileName = SlotName + ".png";
+
+		SnapshotCamera->CaptureScreenshot(ThumbnailDir, FileName);
+		break; // Only snapshot the first camera in a scene.
+	}
+}
+
+FString UPainterSaveGame::GetImagePath(const FString & SlotName)
+{
+	FString ThumbnailDir = FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("Thumbs"));
+	FString FileName = SlotName + ".png";
+
+	return FPaths::Combine(ThumbnailDir, FileName);
 }
