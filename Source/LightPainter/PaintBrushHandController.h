@@ -36,5 +36,14 @@ private:
 	// Config
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AStroke> StrokeClass;
+
+	UPROPERTY(EditDefaultsOnly)
+	FVector ConeOffset = FVector(10, 0.0f, -3.0);
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* Point;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* Tip;
 	
 };

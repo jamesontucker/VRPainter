@@ -9,6 +9,12 @@
 APaintBrushHandController::APaintBrushHandController()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	Point = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Point"));
+	Point->SetupAttachment(GetRootComponent());
+
+	Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tip"));
+	Tip->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
@@ -25,7 +31,7 @@ void APaintBrushHandController::Tick(float DeltaTime)
 
 	if (CurrentStroke)
 	{
-		CurrentStroke->Update(GetActorLocation());
+		CurrentStroke->Update(Tip->GetComponentLocation());
 	}
 
 }
@@ -33,7 +39,7 @@ void APaintBrushHandController::Tick(float DeltaTime)
 void APaintBrushHandController::TriggerPressed()
 {
 	CurrentStroke = GetWorld()->SpawnActor<AStroke>(StrokeClass);
-	CurrentStroke->SetActorLocation(GetActorLocation());
+	CurrentStroke->SetActorLocation(Tip->GetComponentLocation());
 }
 
 void APaintBrushHandController::TriggerReleased()
