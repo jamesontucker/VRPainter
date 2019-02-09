@@ -1,6 +1,7 @@
 #include "Stroke.h"
 #include "Components/SplineMeshComponent.h"
 #include "Engine/World.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 AStroke::AStroke()
 {
@@ -14,6 +15,15 @@ AStroke::AStroke()
 
 	JointMeshes = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("JointMeshes"));
 	JointMeshes->SetupAttachment(Root);
+}
+
+void AStroke::BeginPlay()
+{
+	Super::BeginPlay();
+
+	DynMaterial = UMaterialInstanceDynamic::Create(PaintMaterial, this);
+	SetPaintingMaterial(DynMaterial);
+
 }
 
 FStrokeState AStroke::SerializeToStruct() const
@@ -86,4 +96,20 @@ FQuat AStroke::GetNextSegmentRotation(FVector CurrentLocation) const
 FVector AStroke::GetNextSegmentLocation(FVector CurrentLocation) const
 {
 	return GetTransform().InverseTransformPosition(PreviousCursorLocation);
+}
+
+void AStroke::SetPaintingMaterial(UMaterialInstanceDynamic *Material)
+{
+	StrokeMeshes->SetMaterial(0, Material);
+	JointMeshes->SetMaterial(0, Material);
+
+}
+
+void AStroke::UpdatePaintingMaterial(FLinearColor VectorParameter)
+{
+
+	if (DynMaterial != NULL) {
+		DynMaterial->SetVectorParameterValue(VectorParameterName, VectorParameter);
+	}
+
 }

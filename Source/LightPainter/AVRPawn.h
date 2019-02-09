@@ -28,7 +28,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
 private:
 
 	void RightTriggerPressed() { if (RightHandController) RightHandController->TriggerPressed(); }
@@ -54,14 +53,20 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* Camera;
 
-	// Reference
-	UPROPERTY()
-	AHandControllerBase* RightHandController;
-
 	UPROPERTY()
 	AHandControllerBase* LeftHandController;
 
 	// State
 	int32 LastPaginationOffset = 0;
+
+public:
+
+	// Reference
+	UPROPERTY()
+		AHandControllerBase* RightHandController;
+
+	auto GetRightHand() {
+		return RightHandController;
+	}
 	
 };

@@ -18,6 +18,16 @@ public:
 	FStrokeState SerializeToStruct() const;
 	static AStroke* SpawnAndDeserializeFromStruct(UWorld* World, const FStrokeState& StrokeState);
 
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* PaintMaterial;
+
+	UFUNCTION()
+	void UpdatePaintingMaterial(FLinearColor VectorParameter);
+
+protected:
+
+	virtual void BeginPlay() override;
+
 private:
 
 	FTransform GetNextSegmentTransform(FVector CurrentLocation) const;
@@ -30,14 +40,22 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere)
 	UInstancedStaticMeshComponent* StrokeMeshes;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere)
 	UInstancedStaticMeshComponent* JointMeshes;
 
+	UPROPERTY(EditAnywhere)
+	UMaterialInstanceDynamic* DynMaterial;
+
+	UPROPERTY(VisibleAnywhere)
+	FName VectorParameterName = FName(TEXT("Color"));
+
+	void SetPaintingMaterial(UMaterialInstanceDynamic *Material);
 
 	// State
 	FVector PreviousCursorLocation;
 	TArray<FVector> ControlPoints;
+
 };

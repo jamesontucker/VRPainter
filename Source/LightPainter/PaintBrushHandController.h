@@ -28,6 +28,9 @@ public:
 	void TriggerPressed() override;
 	void TriggerReleased() override;
 
+	UFUNCTION()
+	void ChangeBrushColor(FLinearColor NewColor);
+
 private:
 
 	// State
@@ -42,5 +45,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* Tip;
+
+	UPROPERTY(VisibleAnywhere)
+	FLinearColor VectorParameter = FLinearColor(0.730461f, 0.407240f, 1.0f);
 	
 };

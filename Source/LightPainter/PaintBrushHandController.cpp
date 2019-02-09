@@ -39,10 +39,17 @@ void APaintBrushHandController::Tick(float DeltaTime)
 void APaintBrushHandController::TriggerPressed()
 {
 	CurrentStroke = GetWorld()->SpawnActor<AStroke>(StrokeClass);
+	CurrentStroke->UpdatePaintingMaterial(VectorParameter);
 	CurrentStroke->SetActorLocation(Tip->GetComponentLocation());
 }
 
 void APaintBrushHandController::TriggerReleased()
 {
 	CurrentStroke = nullptr;
+}
+
+
+void APaintBrushHandController::ChangeBrushColor(FLinearColor NewColor)
+{
+	VectorParameter = NewColor;
 }
