@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PaintBrushHandController.h"
-
+#include "Materials/MaterialInstanceDynamic.h"
 #include "Engine/World.h"
 
 
@@ -21,6 +21,11 @@ APaintBrushHandController::APaintBrushHandController()
 void APaintBrushHandController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (PointerMaterial != nullptr) {
+		DynPointerMaterial = UMaterialInstanceDynamic::Create(PointerMaterial, this);
+		Point->SetMaterial(0, DynPointerMaterial);
+	}
 	
 }
 
@@ -39,8 +44,9 @@ void APaintBrushHandController::Tick(float DeltaTime)
 void APaintBrushHandController::TriggerPressed()
 {
 	CurrentStroke = GetWorld()->SpawnActor<AStroke>(StrokeClass);
-	CurrentStroke->UpdatePaintingMaterial(VectorParameter);
 	CurrentStroke->SetActorLocation(Tip->GetComponentLocation());
+	CurrentStroke->UpdatePaintingMaterial(StrokeColor);
+	
 }
 
 void APaintBrushHandController::TriggerReleased()
@@ -51,5 +57,13 @@ void APaintBrushHandController::TriggerReleased()
 
 void APaintBrushHandController::ChangeBrushColor(FLinearColor NewColor)
 {
-	VectorParameter = NewColor;
+	StrokeColor = NewColor;
+	UpdatePointerMaterial(StrokeColor);
+}
+
+void APaintBrushHandController::UpdatePointerMaterial(FLinearColor NewColor)
+{
+	if (DynPointerMaterial != NULL) {
+		DynPointerMaterial->SetVectorParameterValue(PointerColorParam, NewColor);
+	}
 }

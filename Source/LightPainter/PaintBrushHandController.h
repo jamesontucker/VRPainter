@@ -31,7 +31,12 @@ public:
 	UFUNCTION()
 	void ChangeBrushColor(FLinearColor NewColor);
 
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* PointerMaterial;
+
 private:
+
+	void UpdatePointerMaterial(FLinearColor NewColor);
 
 	// State
 	AStroke* CurrentStroke;
@@ -47,6 +52,12 @@ private:
 	UStaticMeshComponent* Tip;
 
 	UPROPERTY(VisibleAnywhere)
-	FLinearColor VectorParameter = FLinearColor(0.730461f, 0.407240f, 1.0f);
+	FLinearColor StrokeColor = FLinearColor(0.730461f, 0.407240f, 1.0f);
+
+	UPROPERTY(EditAnywhere)
+	UMaterialInstanceDynamic* DynPointerMaterial;
+
+	UPROPERTY(VisibleAnywhere)
+	FName PointerColorParam = FName(TEXT("Color"));
 	
 };

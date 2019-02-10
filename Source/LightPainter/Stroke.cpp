@@ -21,8 +21,10 @@ void AStroke::BeginPlay()
 {
 	Super::BeginPlay();
 
-	DynMaterial = UMaterialInstanceDynamic::Create(PaintMaterial, this);
-	SetPaintingMaterial(DynMaterial);
+	if (PaintMaterial != nullptr) {
+		DynMaterial = UMaterialInstanceDynamic::Create(PaintMaterial, this);
+		SetPaintingMaterial(DynMaterial);
+	}
 
 }
 
